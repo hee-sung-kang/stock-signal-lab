@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Signal Lab</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1220;color:#eef2f7;font-family:Arial,sans-serif}
+.wrap{max-width:900px;margin:auto;padding:20px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.logo{font-size:24px;font-weight:800}.sub{color:#8e9aab;font-size:12px}
+.card{background:#121b2b;border:1px solid #243149;border-radius:16px;padding:18px;margin-bottom:14px}
+.select{width:100%;padding:13px;background:#0b1220;color:#fff;border:1px solid #33415c;border-radius:10px;font-size:16px}
+.price{font-size:32px;font-weight:800;margin-top:14px}.change{color:#57d68d;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.metric{background:#0d1625;border-radius:12px;padding:13px}.label{color:#8e9aab;font-size:12px}.value{font-size:20px;font-weight:700;margin-top:6px}
+.signal{text-align:center}.score{font-size:42px;font-weight:900;color:#57d68d}.badge{display:inline-block;padding:6px 12px;border-radius:20px;background:#123b2b;color:#57d68d;font-weight:700}
+ul{padding-left:20px;line-height:1.9}.warn{color:#ffca66}.good{color:#57d68d}
+svg{width:100%;height:300px;background:#0a111e;border-radius:12px}
+@media(max-width:600px){.wrap{padding:14px}.grid{grid-template-columns:1fr 1fr}.price{font-size:28px}svg{height:240px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div><div class="logo">STOCK SIGNAL LAB</div><div class="sub">Technical Signal Prototype V1</div></div>
+    <div>📊</div>
+  </div>
+
+  <div class="card">
+    <div class="label">종목 선택</div>
+    <select class="select" id="stock">
+      <option>삼성전자</option><option>SK하이닉스</option><option>코스피200</option>
+    </select>
+    <div class="price" id="price">68,500원</div>
+    <div class="change">▲ 1.42% (샘플 데이터)</div>
+  </div>
+
+  <div class="card">
+    <div class="label">주가 + 볼린저밴드 + 120일선</div>
+    <svg viewBox="0 0 800 300" preserveAspectRatio="none">
+      <polyline points="0,85 80,100 160,78 240,120 320,110 400,145 480,130 560,165 640,150 720,190 800,170" fill="none" stroke="#57d68d" stroke-width="4"/>
+      <polyline points="0,45 80,58 160,42 240,75 320,68 400,100 480,88 560,118 640,105 720,142 800,125" fill="none" stroke="#6f86a8" stroke-width="2"/>
+      <polyline points="0,125 80,142 160,115 240,165 320,152 400,190 480,172 560,212 640,195 720,238 800,215" fill="none" stroke="#6f86a8" stroke-width="2"/>
+      <polyline points="0,105 100,108 200,112 300,118 400,125 500,132 600,140 700,148 800,155" fill="none" stroke="#ffca66" stroke-width="3" stroke-dasharray="8 6"/>
+    </svg>
+  </div>
+
+  <div class="grid">
+    <div class="metric"><div class="label">RSI (14)</div><div class="value good">28.4</div></div>
+    <div class="metric"><div class="label">120일선</div><div class="value good">-3.2%</div></div>
+    <div class="metric"><div class="label">MACD</div><div class="value warn">약세</div></div>
+    <div class="metric"><div class="label">BB 위치</div><div class="value good">하단 이탈</div></div>
+    <div class="metric"><div class="label">추세</div><div class="value">하락</div></div>
+    <div class="metric"><div class="label">데이터</div><div class="value">샘플</div></div>
+  </div>
+
+  <div class="card signal">
+    <div class="label">현재 매매 판단</div>
+    <div class="score">82 / 100</div>
+    <div class="badge">🟢 매수 관심</div>
+  </div>
+
+  <div class="card">
+    <strong>매수 근거</strong>
+    <ul>
+      <li class="good">✓ RSI 30 이하</li>
+      <li class="good">✓ 볼린저밴드 하단 이탈</li>
+      <li class="good">✓ 120일선 근접</li>
+      <li class="warn">⚠ MACD 반전은 아직 없음</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <strong>과거 동일 신호 분석</strong>
+    <div class="grid" style="margin-top:12px">
+      <div class="metric"><div class="label">발생 횟수</div><div class="value">47회</div></div>
+      <div class="metric"><div class="label">7일 후 평균</div><div class="value">+3.8%</div></div>
+      <div class="metric"><div class="label">30일 후 평균</div><div class="value">+8.4%</div></div>
+      <div class="metric"><div class="label">60일 후 평균</div><div class="value">+12.7%</div></div>
+      <div class="metric"><div class="label">승률</div><div class="value">78.7%</div></div>
+    </div>
+  </div>
+
+  <div class="sub" style="text-align:center;margin:24px 0">V1 Prototype · 실제 주가 데이터 연결 전</div>
+</div>
+</body>
+</html>
