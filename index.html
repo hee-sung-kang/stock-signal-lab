@@ -4,86 +4,300 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stock Signal Lab</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b1220;color:#eef2f7;font-family:Arial,sans-serif}
-.wrap{max-width:900px;margin:auto;padding:20px}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.logo{font-size:24px;font-weight:800}.sub{color:#8e9aab;font-size:12px}
-.card{background:#121b2b;border:1px solid #243149;border-radius:16px;padding:18px;margin-bottom:14px}
-.select{width:100%;padding:13px;background:#0b1220;color:#fff;border:1px solid #33415c;border-radius:10px;font-size:16px}
-.price{font-size:32px;font-weight:800;margin-top:14px}.change{color:#57d68d;margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.metric{background:#0d1625;border-radius:12px;padding:13px}.label{color:#8e9aab;font-size:12px}.value{font-size:20px;font-weight:700;margin-top:6px}
-.signal{text-align:center}.score{font-size:42px;font-weight:900;color:#57d68d}.badge{display:inline-block;padding:6px 12px;border-radius:20px;background:#123b2b;color:#57d68d;font-weight:700}
-ul{padding-left:20px;line-height:1.9}.warn{color:#ffca66}.good{color:#57d68d}
-svg{width:100%;height:300px;background:#0a111e;border-radius:12px}
-@media(max-width:600px){.wrap{padding:14px}.grid{grid-template-columns:1fr 1fr}.price{font-size:28px}svg{height:240px}}
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f1720;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header {
+    padding: 20px 0;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.header p {
+    color: #9ca3af;
+    margin-top: 8px;
+}
+
+.stock-card {
+    background: #182330;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 18px;
+}
+
+.stock-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stock-name {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.price {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+.up {
+    color: #35d07f;
+}
+
+.signal-box {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.signal {
+    flex: 1;
+    background: #111a24;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.signal-title {
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.signal-score {
+    font-size: 34px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.buy {
+    color: #35d07f;
+}
+
+.sell {
+    color: #ff6b6b;
+}
+
+.section {
+    background: #182330;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+.section h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.indicator {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #2a3643;
+}
+
+.indicator:last-child {
+    border-bottom: none;
+}
+
+.label {
+    color: #aeb7c2;
+}
+
+.value {
+    font-weight: bold;
+}
+
+.reason {
+    background: #111a24;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.chart {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    background: #111a24;
+    border-radius: 14px;
+    padding: 15px;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+}
+
+.footer {
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+    padding: 20px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 14px;
+    }
+
+    .signal-box {
+        flex-direction: column;
+    }
+
+    .price {
+        font-size: 26px;
+    }
+}
 </style>
 </head>
+
 <body>
-<div class="wrap">
-  <div class="header">
-    <div><div class="logo">STOCK SIGNAL LAB</div><div class="sub">Technical Signal Prototype V1</div></div>
-    <div>📊</div>
-  </div>
 
-  <div class="card">
-    <div class="label">종목 선택</div>
-    <select class="select" id="stock">
-      <option>삼성전자</option><option>SK하이닉스</option><option>코스피200</option>
-    </select>
-    <div class="price" id="price">68,500원</div>
-    <div class="change">▲ 1.42% (샘플 데이터)</div>
-  </div>
+<div class="container">
 
-  <div class="card">
-    <div class="label">주가 + 볼린저밴드 + 120일선</div>
-    <svg viewBox="0 0 800 300" preserveAspectRatio="none">
-      <polyline points="0,85 80,100 160,78 240,120 320,110 400,145 480,130 560,165 640,150 720,190 800,170" fill="none" stroke="#57d68d" stroke-width="4"/>
-      <polyline points="0,45 80,58 160,42 240,75 320,68 400,100 480,88 560,118 640,105 720,142 800,125" fill="none" stroke="#6f86a8" stroke-width="2"/>
-      <polyline points="0,125 80,142 160,115 240,165 320,152 400,190 480,172 560,212 640,195 720,238 800,215" fill="none" stroke="#6f86a8" stroke-width="2"/>
-      <polyline points="0,105 100,108 200,112 300,118 400,125 500,132 600,140 700,148 800,155" fill="none" stroke="#ffca66" stroke-width="3" stroke-dasharray="8 6"/>
-    </svg>
-  </div>
-
-  <div class="grid">
-    <div class="metric"><div class="label">RSI (14)</div><div class="value good">28.4</div></div>
-    <div class="metric"><div class="label">120일선</div><div class="value good">-3.2%</div></div>
-    <div class="metric"><div class="label">MACD</div><div class="value warn">약세</div></div>
-    <div class="metric"><div class="label">BB 위치</div><div class="value good">하단 이탈</div></div>
-    <div class="metric"><div class="label">추세</div><div class="value">하락</div></div>
-    <div class="metric"><div class="label">데이터</div><div class="value">샘플</div></div>
-  </div>
-
-  <div class="card signal">
-    <div class="label">현재 매매 판단</div>
-    <div class="score">82 / 100</div>
-    <div class="badge">🟢 매수 관심</div>
-  </div>
-
-  <div class="card">
-    <strong>매수 근거</strong>
-    <ul>
-      <li class="good">✓ RSI 30 이하</li>
-      <li class="good">✓ 볼린저밴드 하단 이탈</li>
-      <li class="good">✓ 120일선 근접</li>
-      <li class="warn">⚠ MACD 반전은 아직 없음</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <strong>과거 동일 신호 분석</strong>
-    <div class="grid" style="margin-top:12px">
-      <div class="metric"><div class="label">발생 횟수</div><div class="value">47회</div></div>
-      <div class="metric"><div class="label">7일 후 평균</div><div class="value">+3.8%</div></div>
-      <div class="metric"><div class="label">30일 후 평균</div><div class="value">+8.4%</div></div>
-      <div class="metric"><div class="label">60일 후 평균</div><div class="value">+12.7%</div></div>
-      <div class="metric"><div class="label">승률</div><div class="value">78.7%</div></div>
+    <div class="header">
+        <h1>📊 Stock Signal Lab</h1>
+        <p>기술적 지표 기반 매수·매도 시그널 분석</p>
     </div>
-  </div>
 
-  <div class="sub" style="text-align:center;margin:24px 0">V1 Prototype · 실제 주가 데이터 연결 전</div>
+    <div class="stock-card">
+
+        <div class="stock-top">
+            <div>
+                <div class="stock-name">삼성전자</div>
+                <div class="label">005930 · KOSPI</div>
+            </div>
+
+            <div class="up">▲ 1.82%</div>
+        </div>
+
+        <div class="price">72,500원</div>
+
+        <div class="signal-box">
+
+            <div class="signal">
+                <div class="signal-title">매수 시그널</div>
+                <div class="signal-score buy">78</div>
+                <div class="label">강한 매수 관심</div>
+            </div>
+
+            <div class="signal">
+                <div class="signal-title">매도 시그널</div>
+                <div class="signal-score sell">32</div>
+                <div class="label">매도 신호 약함</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>📈 주가 차트</h2>
+
+        <div class="chart">
+
+            <svg viewBox="0 0 500 160" preserveAspectRatio="none">
+
+                <polyline
+                    points="0,130 40,125 80,135 120,110 160,115 200,90 240,100 280,70 320,80 360,60 400,68 440,45 500,35"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="3"
+                />
+
+                <polyline
+                    points="0,145 500,25"
+                    fill="none"
+                    stroke="#777"
+                    stroke-width="1"
+                    stroke-dasharray="5,5"
+                />
+
+            </svg>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>🔍 기술적 지표</h2>
+
+        <div class="indicator">
+            <span class="label">RSI</span>
+            <span class="value buy">28.4 · 과매도</span>
+        </div>
+
+        <div class="indicator">
+            <span class="label">볼린저밴드</span>
+            <span class="value buy">하단 근접</span>
+        </div>
+
+        <div class="indicator">
+            <span class="label">120일 이동평균</span>
+            <span class="value">73,100원</span>
+        </div>
+
+        <div class="indicator">
+            <span class="label">현재가 / 120일선</span>
+            <span class="value buy">-0.82%</span>
+        </div>
+
+        <div class="indicator">
+            <span class="label">추세</span>
+            <span class="value buy">단기 반등 가능성</span>
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <h2>💡 시그널 판단 근거</h2>
+
+        <div class="reason">
+            <strong class="buy">매수 긍정 요인</strong><br>
+            • RSI가 30 이하로 과매도 구간<br>
+            • 주가가 볼린저밴드 하단에 접근<br>
+            • 현재가가 120일 이동평균선 근처<br>
+            • 단기 반등 가능성 확인
+        </div>
+
+        <div class="reason">
+            <strong class="sell">주의 요인</strong><br>
+            • 120일 이동평균선이 아직 하락 추세<br>
+            • 강한 상승 추세 전환은 아직 확인되지 않음
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Stock Signal Lab · Prototype v0.1
+    </div>
+
 </div>
+
 </body>
 </html>
