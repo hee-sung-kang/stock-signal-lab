@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,15 +7,13 @@
 <title>Stock Signal Lab</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #0f1720;
-    color: #ffffff;
+    color: #fff;
 }
 
 .container {
@@ -37,11 +36,24 @@ body {
     margin-top: 8px;
 }
 
+.add-btn {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 18px;
+}
+
 .stock-card {
     background: #182330;
     border-radius: 18px;
-    padding: 22px;
-    margin-bottom: 18px;
+    padding: 20px;
+    margin-bottom: 15px;
 }
 
 .stock-top {
@@ -51,123 +63,81 @@ body {
 }
 
 .stock-name {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: bold;
 }
 
+.code {
+    color: #8b96a3;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
 .price {
-    font-size: 30px;
+    font-size: 27px;
     font-weight: bold;
-    margin-top: 12px;
+    margin-top: 14px;
 }
 
 .up {
     color: #35d07f;
 }
 
-.signal-box {
+.signal-row {
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 10px;
+    margin-top: 18px;
 }
 
 .signal {
     flex: 1;
     background: #111a24;
-    border-radius: 14px;
-    padding: 18px;
+    border-radius: 12px;
+    padding: 14px;
 }
 
 .signal-title {
     color: #9ca3af;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .signal-score {
-    font-size: 34px;
+    font-size: 28px;
     font-weight: bold;
-    margin-top: 8px;
+    margin-top: 6px;
 }
 
-.buy {
-    color: #35d07f;
+.buy { color: #35d07f; }
+.sell { color: #ff6b6b; }
+
+.delete-btn {
+    float: right;
+    background: transparent;
+    border: 1px solid #4b5563;
+    color: #9ca3af;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
 }
 
-.sell {
-    color: #ff6b6b;
-}
-
-.section {
+.empty {
+    text-align: center;
+    color: #9ca3af;
+    padding: 40px 10px;
     background: #182330;
     border-radius: 18px;
-    padding: 20px;
-    margin-bottom: 18px;
-}
-
-.section h2 {
-    margin-top: 0;
-    font-size: 20px;
-}
-
-.indicator {
-    display: flex;
-    justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid #2a3643;
-}
-
-.indicator:last-child {
-    border-bottom: none;
-}
-
-.label {
-    color: #aeb7c2;
-}
-
-.value {
-    font-weight: bold;
-}
-
-.reason {
-    background: #111a24;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 10px;
-    line-height: 1.6;
-}
-
-.chart {
-    height: 180px;
-    position: relative;
-    overflow: hidden;
-    background: #111a24;
-    border-radius: 14px;
-    padding: 15px;
-}
-
-svg {
-    width: 100%;
-    height: 100%;
 }
 
 .footer {
     text-align: center;
     color: #6b7280;
     font-size: 13px;
-    padding: 20px;
+    padding: 25px;
 }
 
 @media (max-width: 600px) {
     .container {
         padding: 14px;
-    }
-
-    .signal-box {
-        flex-direction: column;
-    }
-
-    .price {
-        font-size: 26px;
     }
 }
 </style>
@@ -182,122 +152,196 @@ svg {
         <p>기술적 지표 기반 매수·매도 시그널 분석</p>
     </div>
 
-    <div class="stock-card">
+    <button class="add-btn" onclick="addStock()">
+        ＋ 관심종목 추가
+    </button>
 
-        <div class="stock-top">
-            <div>
-                <div class="stock-name">삼성전자</div>
-                <div class="label">005930 · KOSPI</div>
-            </div>
-
-            <div class="up">▲ 1.82%</div>
-        </div>
-
-        <div class="price">72,500원</div>
-
-        <div class="signal-box">
-
-            <div class="signal">
-                <div class="signal-title">매수 시그널</div>
-                <div class="signal-score buy">78</div>
-                <div class="label">강한 매수 관심</div>
-            </div>
-
-            <div class="signal">
-                <div class="signal-title">매도 시그널</div>
-                <div class="signal-score sell">32</div>
-                <div class="label">매도 신호 약함</div>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="section">
-
-        <h2>📈 주가 차트</h2>
-
-        <div class="chart">
-
-            <svg viewBox="0 0 500 160" preserveAspectRatio="none">
-
-                <polyline
-                    points="0,130 40,125 80,135 120,110 160,115 200,90 240,100 280,70 320,80 360,60 400,68 440,45 500,35"
-                    fill="none"
-                    stroke="white"
-                    stroke-width="3"
-                />
-
-                <polyline
-                    points="0,145 500,25"
-                    fill="none"
-                    stroke="#777"
-                    stroke-width="1"
-                    stroke-dasharray="5,5"
-                />
-
-            </svg>
-
-        </div>
-
-    </div>
-
-    <div class="section">
-
-        <h2>🔍 기술적 지표</h2>
-
-        <div class="indicator">
-            <span class="label">RSI</span>
-            <span class="value buy">28.4 · 과매도</span>
-        </div>
-
-        <div class="indicator">
-            <span class="label">볼린저밴드</span>
-            <span class="value buy">하단 근접</span>
-        </div>
-
-        <div class="indicator">
-            <span class="label">120일 이동평균</span>
-            <span class="value">73,100원</span>
-        </div>
-
-        <div class="indicator">
-            <span class="label">현재가 / 120일선</span>
-            <span class="value buy">-0.82%</span>
-        </div>
-
-        <div class="indicator">
-            <span class="label">추세</span>
-            <span class="value buy">단기 반등 가능성</span>
-        </div>
-
-    </div>
-
-    <div class="section">
-
-        <h2>💡 시그널 판단 근거</h2>
-
-        <div class="reason">
-            <strong class="buy">매수 긍정 요인</strong><br>
-            • RSI가 30 이하로 과매도 구간<br>
-            • 주가가 볼린저밴드 하단에 접근<br>
-            • 현재가가 120일 이동평균선 근처<br>
-            • 단기 반등 가능성 확인
-        </div>
-
-        <div class="reason">
-            <strong class="sell">주의 요인</strong><br>
-            • 120일 이동평균선이 아직 하락 추세<br>
-            • 강한 상승 추세 전환은 아직 확인되지 않음
-        </div>
-
-    </div>
+    <div id="stockList"></div>
 
     <div class="footer">
-        Stock Signal Lab · Prototype v0.1
+        Stock Signal Lab · Prototype v0.2
     </div>
 
 </div>
+
+<script>
+
+const defaultStocks = [
+    {
+        name: "삼성전자",
+        code: "005930",
+        price: "72,500원",
+        change: "▲ 1.82%",
+        buy: 78,
+        sell: 32
+    },
+    {
+        name: "SK하이닉스",
+        code: "000660",
+        price: "185,000원",
+        change: "▲ 2.41%",
+        buy: 71,
+        sell: 38
+    }
+];
+
+let stocks = JSON.parse(localStorage.getItem("stockSignalStocks"));
+
+if (!stocks) {
+    stocks = defaultStocks;
+    saveStocks();
+}
+
+function saveStocks() {
+    localStorage.setItem(
+        "stockSignalStocks",
+        JSON.stringify(stocks)
+    );
+}
+
+function renderStocks() {
+
+    const list = document.getElementById("stockList");
+
+    if (stocks.length === 0) {
+        list.innerHTML = `
+            <div class="empty">
+                아직 등록된 관심종목이 없습니다.<br>
+                위의 "관심종목 추가" 버튼을 눌러주세요.
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = stocks.map((stock, index) => `
+
+        <div class="stock-card">
+
+            <button
+                class="delete-btn"
+                onclick="deleteStock(${index})">
+                삭제
+            </button>
+
+            <div class="stock-top">
+
+                <div>
+                    <div class="stock-name">
+                        ${stock.name}
+                    </div>
+
+                    <div class="code">
+                        ${stock.code} · KOSPI
+                    </div>
+                </div>
+
+                <div class="up">
+                    ${stock.change || "데이터 준비중"}
+                </div>
+
+            </div>
+
+            <div class="price">
+                ${stock.price || "데이터 준비중"}
+            </div>
+
+            <div class="signal-row">
+
+                <div class="signal">
+
+                    <div class="signal-title">
+                        매수 시그널
+                    </div>
+
+                    <div class="signal-score buy">
+                        ${stock.buy ?? "-"}
+                    </div>
+
+                </div>
+
+                <div class="signal">
+
+                    <div class="signal-title">
+                        매도 시그널
+                    </div>
+
+                    <div class="signal-score sell">
+                        ${stock.sell ?? "-"}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `).join("");
+}
+
+function addStock() {
+
+    const name = prompt("종목명을 입력하세요.");
+
+    if (!name) {
+        return;
+    }
+
+    const code = prompt(
+        "종목코드 6자리를 입력하세요.\n예: 삼성전자 → 005930"
+    );
+
+    if (!code) {
+        return;
+    }
+
+    if (!/^\d{6}$/.test(code)) {
+        alert("종목코드는 숫자 6자리로 입력해주세요.");
+        return;
+    }
+
+    const exists = stocks.some(
+        stock => stock.code === code
+    );
+
+    if (exists) {
+        alert("이미 등록된 종목입니다.");
+        return;
+    }
+
+    stocks.push({
+        name: name,
+        code: code,
+        price: "데이터 준비중",
+        change: "데이터 준비중",
+        buy: "-",
+        sell: "-"
+    });
+
+    saveStocks();
+    renderStocks();
+}
+
+function deleteStock(index) {
+
+    const stock = stocks[index];
+
+    const ok = confirm(
+        `${stock.name}을(를) 관심종목에서 삭제할까요?`
+    );
+
+    if (!ok) {
+        return;
+    }
+
+    stocks.splice(index, 1);
+
+    saveStocks();
+    renderStocks();
+}
+
+renderStocks();
+
+</script>
 
 </body>
 </html>
